@@ -1,13 +1,15 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-# from .database import engine, SessionLocal
-import model, crud
-from wonproj import engine, SessionLocal
+from database import engine, SessionLocal
+import models, crud
+from schemas import UserCreate, User
 
-model.Base.metadata.create_all(bind=engine)
+# Create database tables
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+# Dependency to get the database session
 def get_db():
     db = SessionLocal()
     try:
@@ -15,11 +17,13 @@ def get_db():
     finally:
         db.close()
 
-@app.post("/users/")
-def create_user(name: str, email: str, db: Session = Depends(get_db)):
-    return crud.create_user(db=db, name=name, email=email)
+# Endpoint to create a user
+@app.post("/users/", response_model=User)
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    return crud.create_user(db=db, name=user.name, email=user.email)
 
-@app.get("/users/{user_id}")
+# Endpoint to read a user by ID
+@app.get("/users/{user_id}", response_model=User)
 def read_user(user_id: int, db: Session = Depends(get_db)):
     db_user = crud.get_user(db, user_id=user_id)
     if db_user is None:
