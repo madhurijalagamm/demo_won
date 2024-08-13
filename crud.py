@@ -1,12 +1,12 @@
 from sqlalchemy.orm import Session
-from model import User
+from model import Proposal  # Assuming the Proposal model is defined in the model module
 
-def create_user(db: Session, name: str, email: str):
-    db_user = User(name=name, email=email)
-    db.add(db_user)
+def create_proposal(db: Session, **kwargs):
+    db_proposal = Proposal(**kwargs)
+    db.add(db_proposal)
     db.commit()
-    db.refresh(db_user)
-    return db_user
+    db.refresh(db_proposal)
+    return db_proposal
 
-def get_user(db: Session, user_id: int):
-    return db.query(User).filter(User.id == user_id).first()
+def get_proposal(db: Session, proposal_id: str):
+    return db.query(Proposal).filter(Proposal.id == proposal_id).first()
