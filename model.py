@@ -1,12 +1,8 @@
 from sqlalchemy import Column, String, Boolean, BigInteger, Numeric, Date, Text
 from sqlalchemy.ext.declarative import declarative_base
-
 Base = declarative_base()
-
-
 class Proposal(Base):
     __tablename__ = "crm.proposal"
-
     id = Column(String(500), primary_key=True)
     ods_2_day__c = Column(Boolean)
     ods_2_day_max_quantity__c = Column(BigInteger)
@@ -80,5 +76,3 @@ class Proposal(Base):
     ods_total_net_price__c = Column(Numeric(15, 5))
     ods_valid_until_date__c = Column(Date)
     proposalid = Column(String(500))
-
-# Grant permissions would be handled at the database level, not in SQLAlchemy code
